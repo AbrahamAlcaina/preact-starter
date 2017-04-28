@@ -13,7 +13,11 @@ module.exports = env => {
 			app: './src/index.js',
 			vendor: [
 				// pull these to a `vendor.js` file
-				'preact'
+				'preact', 
+				'preact-router',
+				'preact-redux',
+				'redux',
+				'redux-actions'
 			]
 		},
 		output: {

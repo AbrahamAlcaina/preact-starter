@@ -1,8 +1,9 @@
 import { h } from 'preact';
 import { Link } from 'preact-router';
+import { connect } from 'preact-redux';
 import Card from '../tags/card';
 
-export default function (props) {
+const Home = function ({pwa}) {	
 	return (
 		<div className="page page__home">
 			<Card>
@@ -15,7 +16,10 @@ export default function (props) {
 					<Link href="/foo/bar">Foo/Bar</Link>
 				</nav>
 			</Card>
-
+			<Card>
+				<h2>connect</h2>
+				<p>{pwa.toString()}</p>
+			</Card>
 			<Card>
 				<h2>Features:</h2>
 				<ul>
@@ -46,3 +50,5 @@ export default function (props) {
 		</div>
 	);
 }
+const EnhancedHome = connect(state => state.fakeReducer)(Home);
+export default EnhancedHome;

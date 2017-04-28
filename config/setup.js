@@ -26,7 +26,7 @@ module.exports = isProd => {
 			options: {
 				babel,
 				postcss: [
-					require('autoprefixer')({ browsers: ['last 3 version'] })
+					require('autoprefixer')({ browsers: ['last 2 version'] })
 				]
 			}
 		})
@@ -51,7 +51,10 @@ module.exports = isProd => {
 		plugins.push(
 			new webpack.HotModuleReplacementPlugin(),
 			new webpack.NamedModulesPlugin(),
-			new Dashboard()
+			new Dashboard(),
+			new webpack.DefinePlugin({
+				'process.env.NODE_ENV': JSON.stringify('development')
+			})
 		);
 	}
 

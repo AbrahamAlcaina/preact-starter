@@ -1,11 +1,23 @@
 import { render } from 'preact';
+import { h } from 'preact'
 import './index.sass';
+import { Provider } from 'preact-redux';
+import configureStore from './configureStore';
 
+const dataStore = window.__INITIAL_STATE__; // eslint-disable-line
+const store = configureStore(dataStore); // eslint-disable-line
 let elem, App;
+
 function init() {
 	App = require('./views').default;
-	elem = render(App, document.getElementById('root'), elem);
+	const Main = () => (<Provider store={store}>{App}</Provider>);
+	elem = render(<Main />, document.getElementById('root'), elem);
+	store.dispatch(action());
 }
+
+// test actions
+import { createAction } from 'redux-actions';
+const action = createAction('PWA');
 
 init();
 

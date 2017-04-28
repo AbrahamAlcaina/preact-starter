@@ -10,7 +10,6 @@ import Blog from './pages/blog';
 
 // track pages on route change
 const onChange = obj => window.ga && ga('send', 'pageview', obj.url);
-
 export default (
 	<Layout>
 		<Router onChange={ onChange }>
