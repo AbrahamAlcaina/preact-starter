@@ -1,17 +1,13 @@
-import { render } from 'preact';
-import { h } from 'preact'
+import { render, h } from 'preact';
 import './index.sass';
-import { Provider } from 'preact-redux';
-import configureStore from './configureStore';
+import App from './app';
+import configureStore from './app/configureStore';
 
 const dataStore = window.__INITIAL_STATE__; // eslint-disable-line
 const store = configureStore(dataStore); // eslint-disable-line
-let elem, App;
-
+let elem;
 function init() {
-	App = require('./views').default;
-	const Main = () => (<Provider store={store}>{App}</Provider>);
-	elem = render(<Main />, document.getElementById('root'), elem);
+	elem = render(<App store={store}/>, document.getElementById('root'), elem);
 	store.dispatch(action());
 }
 
@@ -39,6 +35,6 @@ if (process.env.NODE_ENV === 'production') {
 	require('preact/devtools');
 	// listen for HMR
 	if (module.hot) {
-		module.hot.accept('./views', init);
+		module.hot.accept('./app', init);
 	}
 }

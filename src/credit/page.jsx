@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import Card from '../tags/card';
+import Card from '../components/card';
 
 const links = [{
 	name: 'lukeed/preact-starter',

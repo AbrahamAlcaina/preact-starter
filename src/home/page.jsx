@@ -1,9 +1,10 @@
 import { h } from 'preact';
 import { Link } from 'preact-router';
 import { connect } from 'preact-redux';
-import Card from '../tags/card';
+import Card from '../components/card';
+import * as homeActions from './actions';
 
-const Home = function ({pwa}) {	
+const Home = function ({loaded, loadHomeAsync}) {
 	return (
 		<div className="page page__home">
 			<Card>
@@ -17,8 +18,9 @@ const Home = function ({pwa}) {
 				</nav>
 			</Card>
 			<Card>
-				<h2>connect</h2>
-				<p>{pwa.toString()}</p>
+				<h2>loaded</h2>
+				<p>{loaded.toString()}</p>
+				<button onClick={loadHomeAsync}>Load</button>
 			</Card>
 			<Card>
 				<h2>Features:</h2>
@@ -49,6 +51,7 @@ const Home = function ({pwa}) {
 			</Card>
 		</div>
 	);
-}
-const EnhancedHome = connect(state => state.fakeReducer)(Home);
+};
+
+const EnhancedHome = connect(state => state.home, homeActions)(Home);
 export default EnhancedHome;
