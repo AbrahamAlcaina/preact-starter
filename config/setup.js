@@ -6,6 +6,7 @@ const Dashboard = require('webpack-dashboard/plugin');
 const Clean = require('clean-webpack-plugin');
 const Copy = require('copy-webpack-plugin');
 const HTML = require('html-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const uglify = require('./uglify');
 const babel = require('./babel');
@@ -33,9 +34,11 @@ module.exports = isProd => {
 	];
 
 	if (isProd) {
+		//babel.plugins.push(["lodash", { "id": ["lodash-es", "lodash", "redux", "redux-actions"] }]);
 		babel.presets.push('babili');
 
 		plugins.push(
+			new LodashModuleReplacementPlugin(),
 			new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
 			new webpack.optimize.UglifyJsPlugin(uglify),
 			new ExtractText('styles.[hash].css'),

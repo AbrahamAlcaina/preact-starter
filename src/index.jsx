@@ -8,12 +8,8 @@ const store = configureStore(dataStore); // eslint-disable-line
 let elem;
 function init() {
 	elem = render(<App store={store}/>, document.getElementById('root'), elem);
-	store.dispatch(action());
+	window.app = elem;
 }
-
-// test actions
-import { createAction } from 'redux-actions';
-const action = createAction('PWA');
 
 init();
 
