@@ -1,8 +1,10 @@
 import { h } from 'preact';
 import { Link } from 'preact-router';
-import Card from '../tags/card';
+import { connect } from 'preact-redux';
+import Card from '../components/card';
+import * as homeActions from './actions';
 
-export default function (props) {
+const Home = function ({loaded, loadHomeAsync}) {
 	return (
 		<div className="page page__home">
 			<Card>
@@ -15,7 +17,11 @@ export default function (props) {
 					<Link href="/foo/bar">Foo/Bar</Link>
 				</nav>
 			</Card>
-
+			<Card>
+				<h2>loaded</h2>
+				<p>{loaded.toString()}</p>
+				<button onClick={loadHomeAsync}>Load</button>
+			</Card>
 			<Card>
 				<h2>Features:</h2>
 				<ul>
@@ -45,4 +51,7 @@ export default function (props) {
 			</Card>
 		</div>
 	);
-}
+};
+
+const EnhancedHome = connect(state => state.home, homeActions)(Home);
+export default EnhancedHome;

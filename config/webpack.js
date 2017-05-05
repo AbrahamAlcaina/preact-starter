@@ -10,10 +10,16 @@ module.exports = env => {
 
 	return {
 		entry: {
-			app: './src/index.js',
+			app: './client/index.jsx',
 			vendor: [
 				// pull these to a `vendor.js` file
-				'preact'
+				'regenerator-runtime',
+				'preact',
+				'preact-router',
+				'preact-redux',
+				'redux',
+				'redux-actions',
+				'redux-saga'
 			]
 		},
 		output: {
@@ -22,10 +28,11 @@ module.exports = env => {
 			publicPath: '/'
 		},
 		resolve: {
+			extensions: ['.js', '.jsx'],
 			alias: {
 				// you may need `preact-compat` instead!
 				'react': 'preact/aliases',
-	 			'react-dom': 'preact/aliases'
+				'react-dom': 'preact/aliases'
 			}
 		},
 		module: {

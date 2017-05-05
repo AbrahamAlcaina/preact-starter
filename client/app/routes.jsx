@@ -1,12 +1,12 @@
-import { h } from 'preact'
+import { h } from 'preact';
 import { Router } from 'preact-router';
 
-import Home from './pages/home';
-import Layout from './tags/layout';
-import Article from './pages/article';
-import Error404 from './pages/errors/404';
-import Credit from './pages/credit';
-import Blog from './pages/blog';
+import Home from '../home/page';
+import Layout from '../components/layout';
+import Article from '../blog/article';
+import Error404 from '../errors/404';
+import Credit from '../credit/page';
+import Blog from '../blog/page';
 
 // track pages on route change
 const onChange = obj => window.ga && ga('send', 'pageview', obj.url);

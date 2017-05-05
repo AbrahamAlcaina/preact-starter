@@ -1,10 +1,14 @@
-import { render } from 'preact';
+import { render, h } from 'preact';
 import './index.sass';
+import App from './app';
+import configureStore from './app/configureStore';
 
-let elem, App;
-function init() {
-	App = require('./views').default;
-	elem = render(App, document.getElementById('root'), elem);
+const dataStore = window.__INITIAL_STATE__; // eslint-disable-line
+const store = configureStore(dataStore); // eslint-disable-line
+let elem;
+function init() {	
+	elem = render(<App store={store}/>, document.body, document.getElementById('root'));
+	window.app = elem;
 }
 
 init();
@@ -27,6 +31,6 @@ if (process.env.NODE_ENV === 'production') {
 	require('preact/devtools');
 	// listen for HMR
 	if (module.hot) {
-		module.hot.accept('./views', init);
+		module.hot.accept('./app', init);
 	}
 }
