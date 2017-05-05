@@ -10,9 +10,10 @@ module.exports = env => {
 
 	return {
 		entry: {
-			app: './src/index.jsx',
+			app: './client/index.jsx',
 			vendor: [
 				// pull these to a `vendor.js` file
+				'regenerator-runtime',
 				'preact',
 				'preact-router',
 				'preact-redux',

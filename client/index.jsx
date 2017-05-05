@@ -6,8 +6,8 @@ import configureStore from './app/configureStore';
 const dataStore = window.__INITIAL_STATE__; // eslint-disable-line
 const store = configureStore(dataStore); // eslint-disable-line
 let elem;
-function init() {
-	elem = render(<App store={store}/>, document.getElementById('root'), elem);
+function init() {	
+	elem = render(<App store={store}/>, document.body, document.getElementById('root'));
 	window.app = elem;
 }
 
