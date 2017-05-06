@@ -15,6 +15,7 @@
     "size": "webpack-bundle-analyzer stats.json",
     "start": "serve dist -s",
     "watch": "webpack-dashboard -- webpack-dev-server --config config/webpack",
+    "server-pro": "NODE_ENV=production node server/index.js",
     "server": "nodemon --watch server --watch dist server/index.js"
   },
   "dependencies": {
@@ -33,7 +34,8 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.0.2",
     "redux-saga": "^0.15.0",
-    "reselect": "^3.0.0"
+    "reselect": "^3.0.0",
+    "spdy": "^3.4.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

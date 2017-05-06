@@ -7,7 +7,6 @@ const exclude = /(node_modules|bower_components)/;
 
 module.exports = env => {
 	const isProd = env && env.production;
-
 	return {
 		entry: {
 			app: './client/index.jsx',

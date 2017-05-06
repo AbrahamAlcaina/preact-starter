@@ -14,12 +14,16 @@ const ssr = require('./ssr');
 const compression = require('compression')
 const app = express();
 const glob = require('glob');
-const appPath = glob.sync('dist/app.*.js')[0].replace('dist', '/assets');
-const vendorPath = glob.sync('dist/vendor.*.js')[0].replace('dist', '/assets');
+const appPath = glob.sync('dist/app.*.js')[0].replace('dist', '');
+const vendorPath = glob.sync('dist/vendor.*.js')[0].replace('dist', '');
+const spdy = require('spdy'); 
+const options = {
+    key: fs.readFileSync(__dirname + '/certificate/server.key'),
+    cert:  fs.readFileSync(__dirname + '/certificate/server.crt')
+}
 
 app.use(compression());
-app.use('/assets', express.static('dist'));
-app.get('*', (req, res) => {
+app.get(['/', '/home', '/credit', '/blog', '/blog/:id'], (req, res) => {
   const data = {};  // mandatory data
   const ssrResult = ssr(data);
   // send it back wrapped up as an HTML5 document:
@@ -59,9 +63,23 @@ app.get('*', (req, res) => {
       </body>
     </html>`);
 });
+app.use(express.static('dist'));
 
 // start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Preact Server start on ${PORT}`);
-});
+if (process.env.NODE_ENV === 'production'){
+  spdy
+    .createServer(options, app)
+    .listen(PORT, (error) => {
+      if (error) {
+        console.error(error)
+        return process.exit(1)
+      } else {
+        console.log('Listening on port: ' + PORT + '.')
+      }
+    });
+} else {
+  app.listen(PORT, () => {
+    console.log(`Preact Server start on ${PORT}`);
+  });
+}
