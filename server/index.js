@@ -24,10 +24,28 @@ const options = {
 
 app.use(compression());
 app.get(['/', '/home', '/credit', '/blog', '/blog/:id'], (req, res) => {
+  res.push(`/dist${appPath}`, {'content-type': 'application/javascript'}, function(err, stream) {
+      if (err) {
+        stream.end(error);
+      }
+      stream.end('');
+    });
+  res.push(`/dist${vendorPath}`, {'content-type': 'application/javascript'}, function(err, stream) {
+    if (err) {
+      stream.end(error);
+    }
+    stream.end('');
+  });
+  res.push(`/dist/manifest.json`, {'content-type': 'application/javascript'}, function(err, stream) {
+    if (err) {
+      stream.end(error);
+    }
+    stream.end('');
+  });
   const data = {};  // mandatory data
   const ssrResult = ssr(data);
   // send it back wrapped up as an HTML5 document:
-  res.send(`<!DOCTYPE html>
+  res.end(`<!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="utf-8">
