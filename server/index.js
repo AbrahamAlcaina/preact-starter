@@ -13,7 +13,6 @@ const express = require('express');
 const ssr = require('./ssr');
 const compression = require('compression');
 const zlib = require('zlib');
-const deflate = zlib.createDeflate();
 const app = express();
 const glob = require('glob');
 const appPath = glob.sync('dist/app.*.js')[0].replace('dist', '');
@@ -24,78 +23,30 @@ const options = {
     key: fs.readFileSync(__dirname + '/certificate/server.key'),
     cert:  fs.readFileSync(__dirname + '/certificate/server.crt')
 }
-/*
-const pushFile = (res, file, options = {}) => {
-  if (!res.push){
-    return Promise.resolve();
-  }
-  return new Promise (resolve =>{
-    fs.readFile(`${process.cwd()}/dist${file}`, (err, data)=> {
-      if (err) {
-        console.log(err);
-      }
-      console.log('push file', file, options);      
-      res.push(file, options).end(data);
-      resolve();
-    });
-  });  
-};
-const pushFile = (res, file, options = {}) => {
-  if (!res.push){
-    return Promise.resolve();
-  }
-  return new Promise (resolve =>{
-    const stream$ = fs
-      .createReadStream(`${process.cwd()}/dist${file}`)
-      .pipe(zlib.createGzip());
-    stream$.on('error',()=> console.log('error'));
-    stream$.on('finish',(data)=> {
-      console.log(data);
-      res.push(file, options).append($stream).end(data);
-      resolve();
-    });
-  });  
-};
-const pushFile = (res, file, options = {}) => {
-  if (!res.push){
-    return Promise.resolve();
-  }
-  return new Promise (resolve =>{
-    const stream$ = fs
-      .readFile(`${process.cwd()}/dist${file}`, (err, data)=>{
-        res.push(file, options).end(zlib.deflate(data));
-      });
-  });  
-};
-const pushFile = (res, file, options = {}) => {
-  if (!res.push){
-    return Promise.resolve();
-  }
-  return new Promise (resolve =>{
-  const push$ = res.push(file, options); 
-  const stream$ = fs
-      .createReadStream(`${process.cwd()}/dist${file}`,{encoding: 'utf8'})
-      .pipe(push$);
-  stream$.on('finish', resolve);
-  });  
-};
-
-*/
 
 const pushFile = (res, file, options = {}) => {
   if (!res.push){
     return Promise.resolve();
   }
   return new Promise (resolve =>{
-    fs.readFile(`${process.cwd()}/dist${file}`, (err, data)=> {
+    const cleanup = (err) => {
+      stream$.removeListener('finish', end);
+      stream$.removeListener('error', cleanup);
       if (err) {
         console.log(err);
       }
-      zlib.deflate(data, (err, compressed) =>{
-        res.push(file, options).end(compressed);
-        resolve();
-      })
-    });
+    };
+    const end = () => {
+      cleanup();
+      resolve();
+    }
+    const push$ = res.push(file, options); 
+    const stream$ = fs
+        .createReadStream(`${process.cwd()}/dist${file}`)
+        .pipe(zlib.createDeflate())
+        .pipe(push$);
+    stream$.on('error', cleanup);
+    stream$.on('finish', end);
   });  
 };
 
@@ -107,8 +58,7 @@ app.get(['/', '/home', '/credit', '/blog', '/blog/:id'], (req, res) => {
   Promise.all([
     pushFile(res, stylesPath, cssFileOptions),
     pushFile(res, appPath, jsFileOptions),
-    pushFile(res, vendorPath, jsFileOptions),
-    pushFile(res, '/service-worker.js', jsFileOptions)
+    pushFile(res, vendorPath, jsFileOptions)
   ]).then(() => {
     const initialData = {};  // mandatory data
     const ssrResult = ssr(initialData);
