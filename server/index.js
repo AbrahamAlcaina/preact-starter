@@ -21,18 +21,20 @@ const stylesPath = glob.sync('dist/styles.*.css')[0].replace('dist', '');
 const spdy = require('spdy'); 
 
 // -> redirect to https
-var http = express();
-http.get('*',function(req,res){  
-    res.redirect("https://" + req.headers.host + req.url);
-});
-http.listen(80, error => {
-  if (error) {
-    console.error(error);
-    return process.exit(1);
-  } else {
-    console.log('Listening on port: 80.');
-  }
-});
+if (process.env.NODE_ENV === 'production') {
+  const http = express();
+  http.get('*',function(req,res){  
+      res.redirect("https://" + req.headers.host + req.url);
+  });
+  http.listen(80, error => {
+    if (error) {
+      console.error(error);
+      return process.exit(1);
+    } else {
+      console.log('Listening on port: 80.');
+    }
+  });
+}
 
 const options = {
     key: fs.readFileSync(__dirname + '/certificate/server.key'),
@@ -76,6 +78,8 @@ app.get(['/', '/home', '/credit', '/blog', '/blog/:id'], (req, res) => {
   ]).then(() => {
     const initialData = {};  // mandatory data
     const ssrResult = ssr(initialData);
+    // print shell
+    // console.log(ssrResult.html);
     // send it back wrapped up as an HTML5 document:
     res.end(`<!DOCTYPE html>
       <html lang="en">
