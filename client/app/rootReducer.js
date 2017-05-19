@@ -4,5 +4,5 @@ import blog from '../blog/reducer';
 import credit from '../credit/reducer';
 
 export default combineReducers({
-    home, blog, credit
+  home, blog, credit,
 });

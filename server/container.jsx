@@ -10,4 +10,4 @@ export default function (initData) {
     <Provider store={store}>
       <Shell />
     </Provider>);
-};
+}

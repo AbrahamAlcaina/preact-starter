@@ -16,7 +16,8 @@
     "start": "serve dist -s",
     "watch": "webpack-dashboard -- webpack-dev-server --config config/webpack",
     "server-pro": "better-npm-run server-pro",
-    "server": "nodemon --watch server --watch dist server/index.js"
+    "server": "nodemon --watch server --watch dist server/index.js",
+    "lint": "eslint --fix --ext .js --ext .jsx client"
   },
   "betterScripts": {
     "server-pro": {
@@ -35,13 +36,14 @@
     "compression": "^1.6.2",
     "express": "^4.15.2",
     "glob": "^7.1.1",
+    "global": "^4.3.2",
     "md-colors": "^1.0.0",
     "normalizr": "^3.2.2",
     "preact": "^7.2.0",
     "preact-redux": "^2.0.1",
     "preact-render-to-string": "^3.6.1",
     "preact-router": "^2.4.1",
-    "react-intl": "^2.3.0",
+    "prop-types": "^15.5.10",
     "redux": "^3.6.0",
     "redux-actions": "^2.0.2",
     "redux-saga": "^0.15.0",
@@ -59,6 +61,11 @@
     "clean-webpack-plugin": "^0.1.15",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.27.1",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "15.0.1",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "5.0.1",
+    "eslint-plugin-react": "7.0.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^2.28.0",
     "lodash-webpack-plugin": "^0.11.3",

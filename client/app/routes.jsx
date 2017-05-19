@@ -8,17 +8,19 @@ import Error404 from '../errors/404';
 import Credit from '../credit/page';
 import Blog from '../blog/page';
 
-// track pages on route change
+// track pages on route change it uses windows & googleAnalitics
+// good idea move it to a redux middleware
+// eslint-disable-next-line
 const onChange = obj => window.ga && ga('send', 'pageview', obj.url);
 
 export default (
-	<Layout>
-		<Router onChange={ onChange }>
-			<Home path="/" />
-			<Blog path="/blog" />
-			<Article path="/blog/:title" />
-			<Credit path="/credit" />
-			<Error404 default />
-		</Router>
-	</Layout>
+  <Layout>
+    <Router onChange={onChange}>
+      <Home path="/" />
+      <Blog path="/blog" />
+      <Article path="/blog/:title" />
+      <Credit path="/credit" />
+      <Error404 default />
+    </Router>
+  </Layout>
 );

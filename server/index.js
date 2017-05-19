@@ -1,50 +1,55 @@
+/* eslint-disable */
 // Support .jsx and react on Node runtime
 require('babel-register')({
   extensions: ['.jsx', '.js'],
-  presets :['es2015'],
-  plugins : [
-      [ 'transform-react-jsx', { pragma: 'h' } ]
+  presets: ['es2015'],
+  plugins: [
+      ['transform-react-jsx', { pragma: 'h' }]
   ]
 });
 
 const fs = require('fs');
-const path = require('path');
 const express = require('express');
 const ssr = require('./ssr');
 const compression = require('compression');
 const zlib = require('zlib');
-const app = express();
 const glob = require('glob');
+
+const app = express();
 const appPath = glob.sync('dist/app.*.js')[0].replace('dist', '');
 const vendorPath = glob.sync('dist/vendor.*.js')[0].replace('dist', '');
 const stylesPath = glob.sync('dist/styles.*.css')[0].replace('dist', '');
-const spdy = require('spdy'); 
+const spdy = require('spdy');
 
 // -> redirect to https
 if (process.env.NODE_ENV === 'production') {
   const http = express();
-  http.get('*',function(req,res){  
-      res.redirect("https://" + req.headers.host + req.url);
+  http.get('*', (req, res) => {
+    res.redirect(`https://${req.headers.host}${req.url}`);
   });
-  http.listen(80, error => {
+  http.listen(80, (error) => {
     if (error) {
       console.error(error);
       return process.exit(1);
-    } else {
-      console.log('Listening on port: 80.');
     }
+    console.log('Listening on port: 80.');
   });
 }
 
-const options = {
-    key: fs.readFileSync(__dirname + '/certificate/server.key'),
-    cert:  fs.readFileSync(__dirname + '/certificate/server.crt')
+const certificateOptions = {
+  key: fs.readFileSync(`${__dirname}/certificate/server.key`),
+  cert: fs.readFileSync(`${__dirname}/certificate/server.crt`)
 };
 const pushFile = (res, file, options = {}) => {
-  if (!res.push){
+  if (!res.push) {
     return Promise.resolve();
   }
-  return new Promise (resolve =>{
+  return new Promise((resolve) => {
+    const push$ = res.push(file, options);
+    const stream$ = fs
+        .createReadStream(`${process.cwd()}/dist${file}`)
+        .pipe(zlib.createDeflate())
+        .pipe(push$);
     const cleanup = (err) => {
       stream$.removeListener('finish', end);
       stream$.removeListener('error', cleanup);
@@ -55,22 +60,17 @@ const pushFile = (res, file, options = {}) => {
     const end = () => {
       cleanup();
       resolve();
-    }
-    const push$ = res.push(file, options); 
-    const stream$ = fs
-        .createReadStream(`${process.cwd()}/dist${file}`)
-        .pipe(zlib.createDeflate())
-        .pipe(push$);
+    };
+
     stream$.on('error', cleanup);
     stream$.on('finish', end);
-  });  
+  });
 };
 
 app.use(compression());
-const cssFileOptions = { request: { accept: '*/\*' , 'accept-encoding': 'deflate, gzip;q=1.0, *;q=0.5'}, response: { 'content-encoding': 'deflate', 'content-type': 'text/css'}};
-const jsFileOptions = { request: { accept: '*/\*' , 'accept-encoding': 'deflate, gzip;q=1.0, *;q=0.5'}, response: { 'content-encoding': 'deflate', 'content-type': 'application/javascript'}};
+const cssFileOptions = { request: { accept: '*/\*', 'accept-encoding': 'deflate, gzip;q=1.0, *;q=0.5' }, response: { 'content-encoding': 'deflate', 'content-type': 'text/css' } };
+const jsFileOptions = { request: { accept: '*/\*', 'accept-encoding': 'deflate, gzip;q=1.0, *;q=0.5' }, response: { 'content-encoding': 'deflate', 'content-type': 'application/javascript' } };
 app.get(['/', '/home', '/credit', '/blog', '/blog/:id'], (req, res) => {
-
   Promise.all([
     pushFile(res, stylesPath, cssFileOptions),
     pushFile(res, appPath, jsFileOptions),
@@ -118,16 +118,15 @@ app.use(express.static('dist'));
 
 // start server
 const PORT = process.env.PORT || 3000;
-if (process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === 'production') {
   spdy
-    .createServer(options, app)
+    .createServer(certificateOptions, app)
     .listen(PORT, (error) => {
       if (error) {
         console.error(error);
         return process.exit(1);
-      } else {
-        console.log('Listening on port: ' + PORT + '.');
       }
+      console.log(`Listening on port: ${PORT}.`);
     });
 } else {
   app.listen(PORT, () => {

@@ -1,0 +1,12 @@
+{
+  "extends": "airbnb",
+  "settings": {
+    "react": {
+      "pragma": "h"
+    }
+  },
+  "rules": {
+    "func-names": ["error", "never"], 
+    "comma-dangle": 0
+  }
+}

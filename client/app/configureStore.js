@@ -1,4 +1,4 @@
-import { createStore, compose, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from './rootReducer';
 import rootSaga from './rootSaga';
@@ -13,7 +13,7 @@ export default function configureStore(initialState) {
   if (process.env.NODE_ENV !== 'production') {
     // dev add devTools only in dev
     const composeWithDevTools = require('remote-redux-devtools').composeWithDevTools; // eslint-disable-line 
-    const composeEnhancers = composeWithDevTools({ realtime: true});
+    const composeEnhancers = composeWithDevTools({ realtime: true });
     createStoreWithMiddleware =
       composeEnhancers(applyMiddleware(...middlewares))(createStore);
   }
@@ -28,4 +28,4 @@ export default function configureStore(initialState) {
   // start sagas;
   sagaMiddleware.run(rootSaga);
   return store;
-};
+}
