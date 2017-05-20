@@ -2,6 +2,7 @@ import { h } from 'preact';
 import { Link } from 'preact-router';
 import { connect } from 'preact-redux';
 import { PropTypes } from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import Card from '../components/card';
 import * as homeActions from './actions';
 
@@ -9,7 +10,8 @@ const Home = function ({ loaded, loadHomeAsync }) {
   return (
     <div className="page page__home">
       <Card>
-        <h1>Home</h1>
+        <h1>
+        </h1>
         <p>This is the home page.</p>
 
         <p>You should check out:</p>

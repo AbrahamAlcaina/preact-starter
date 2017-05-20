@@ -36,6 +36,10 @@ module.exports = isProd => {
 	if (isProd) {
 		//babel.plugins.push(["lodash", { "id": ["lodash-es", "lodash", "redux", "redux-actions"] }]);
 		babel.presets.push('babili');
+		babel.plugins.push(["react-intl", {
+			"messagesDir": "./language/messages",
+			"enforceDescriptions": false
+		}]);
 
 		plugins.push(
 			new LodashModuleReplacementPlugin(),

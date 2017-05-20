@@ -2,13 +2,23 @@ import { render, h } from 'preact';
 import './index.sass';
 import App from './app';
 import configureStore from './app/configureStore';
+import localeData from './../language/messages/data.json';
+
 
 /* eslint-disable */
+// load intl
+const language = (navigator.languages && navigator.languages[0]) ||
+                     navigator.language ||
+                     navigator.userLanguage;
+const languageWithoutRegionCode = language.toLowerCase().split(/[_-]+/)[0];
+const messages = localeData[languageWithoutRegionCode] || localeData[language] || localeData.en;
+
 const dataStore = window.__INITIAL_STATE__;
 const store = configureStore(dataStore);
 let elem;
 function init() {
-  elem = render(<App store={store} />, document.body, document.getElementById('root'));
+  console.log(language,messages)
+  elem = render(<App store={store} locale={languageWithoutRegionCode} messages={messages}/>, document.body, document.getElementById('root'));
   window.app = elem;
 }
 
