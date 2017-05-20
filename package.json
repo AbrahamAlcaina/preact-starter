@@ -17,7 +17,10 @@
     "watch": "webpack-dashboard -- webpack-dev-server --config config/webpack",
     "server-pro": "better-npm-run server-pro",
     "server": "nodemon --watch server --watch dist server/index.js",
-    "lint": "eslint --fix --ext .js --ext .jsx client"
+    "lint": "eslint --fix --ext .js --ext .jsx client",
+    "language": "node ./config/language.js",
+    "docker-image": "docker build --no-cache -t cruise .",
+    "pre-publish" : "npm run build && npm run language && npm run docker-image"
   },
   "betterScripts": {
     "server-pro": {

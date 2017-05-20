@@ -18,7 +18,9 @@ module.exports = env => {
 				'preact-redux',
 				'redux',
 				'redux-actions',
-				'redux-saga'
+				'redux-saga',
+        'react-intl',
+        'preact-intl'
 			]
 		},
 		output: {

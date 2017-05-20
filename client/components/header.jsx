@@ -4,7 +4,7 @@ import { Link } from 'preact-router';
 export default function () {
   return (
     <header className="header">
-      <h1>Cruceros de oferta</h1>
+      <h1>Cruceros</h1>
       <nav>
         <Link href="/">Home</Link>
         <Link href="/blog">Blog</Link>

@@ -6,7 +6,6 @@ import es from 'react-intl/locale-data/es';
 import en from 'react-intl/locale-data/en';
 import Routes from './routes';
 
-
 addLocaleData([...es, ...en]);
 
 const App = ({ store, locale, messages }) => (

@@ -2,7 +2,7 @@ import { render, h } from 'preact';
 import './index.sass';
 import App from './app';
 import configureStore from './app/configureStore';
-import localeData from './../language/messages/data.json';
+import localeData from './../language/data.json';
 
 
 /* eslint-disable */

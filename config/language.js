@@ -1,9 +1,9 @@
-import * as fs from 'fs';
-import { sync as globSync } from 'glob';
-import { sync as mkdirpSync } from 'mkdirp';
+const fs = require('fs');
+const globSync = require('glob').sync;
+const mkdirpSync = require('mkdirp').sync;
 
-const filePattern = './build/messages/**/*.json';
-const outputDir = './build/locales/';
+const filePattern = './language/messages/**/*.json';
+const outputDir = './dist/locales/';
 
 // Aggregates the default messages that were extracted from the example app's
 // React components via the React Intl Babel plugin. An error will be thrown if
