@@ -37,8 +37,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const certificateOptions = {
-  key: fs.readFileSync(`${__dirname}/certificate/server.key`),
-  cert: fs.readFileSync(`${__dirname}/certificate/server.crt`)
+  key: fs.readFileSync(`${__dirname}/certificate/crucerosdeoferta.key`),
+  cert: fs.readFileSync(`${__dirname}/certificate/crucerosdeoferta.crt`)
 };
 const pushFile = (res, file, options = {}) => {
   if (!res.push) {
